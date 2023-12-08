@@ -1,15 +1,16 @@
 %{
-    #include <stdio.h>
-    #include <string.h>
-    #include <stdlib.h>
-    #include "ex2.tab.h"
+#include "calculator.tab.h"
 %}
+
 %%
-[0-9]+  {yylval.num=atoi(yytext); return NUMBER;}/*передача бизону токе на числа */
-"+" {return PLUS;}
-"-" {return MINUS;}
-\n  {return EOL;}
-. {printf("Ошибка\n");}
+
+[0-9]+      { yylval = atoi(yytext); return NUM; }
+[-+]        { return *yytext; }
+[ \t\n]     ;  /* пропуск пробелов и символов новой строки */
+.           { return *yytext; }
+
 %%
-int yywrap(){
+
+int yywrap() {
+    return 1;
 }
