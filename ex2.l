@@ -1,5 +1,5 @@
 %{
-#include "calculator.tab.h"
+#include "ex2.tab.h"
 %}
 
 %%
