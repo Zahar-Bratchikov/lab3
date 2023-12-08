@@ -1,34 +1,35 @@
 %{
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include "ex_2.tab.h"
+int yylex();//возвращение входного символа
+int yyerror( char *s);//вывод сообщения об ошибке
 %}
 
-%token NUM
-%token PLUS
-%token MINUS
-
+%union{
+    int num;
+}
+%token EOL
+%token<num> NUMBER
+%type<num> exp
+%token PLUS MINUS
 %%
-
-expression: expression PLUS term
-          | expression MINUS term
-          | term
-          ;
-
-term: term PLUS factor
-    | term MINUS factor
-    | factor
-    ;
-
-factor: NUM
-      ;
-
+input:
+|    line input;
+line:
+    exp EOL {printf("%d\n",$1);}
+|   EOL;
+exp:
+    NUMBER {$$=$1;}
+|   exp PLUS exp {$$=$1+$3;}//наследование суммы ($1+$3)
+|   exp MINUS exp {$$=$1-$3;};
 %%
-
-int main() {
+int main(){
     yyparse();
     return 0;
 }
-
-int yyerror(const char *msg) {
-    fprintf(stderr, "Error: %s\n", msg);
-    return 1;
+int yyerror( char *s){
+    printf("ERROR:%s\n",s);
+    return 0;
 }
